@@ -12,7 +12,7 @@ class omManager:
     currency= Currency
 
     @classmethod
-    async def ainit(self):
+    async def setup(self):
         await self._migrate_models()
         await self.scan_all_models()
         

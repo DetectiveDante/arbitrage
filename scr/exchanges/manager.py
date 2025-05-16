@@ -9,7 +9,7 @@ class ExchangeManager:
     exchanges:Dict[str, Poloniex] = {}
     log = get_logger('Exchange Manager')
 
-    async def ainit(self):
+    async def setup(self):
         self.log.info('start...', extra={'task':'SETUP'})
         self.exchanges = {v.id:v for v in await asyncio.gather(*[i.setup() for i in exchanges])}
         self.log.info('done!', extra={'task':'SETUP'})
