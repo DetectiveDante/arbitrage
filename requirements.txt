@@ -1,0 +1,6 @@
+redis==4.6.0
+redis_om==0.3.5
+pydantic==2.7.1
+ccxt==4.4.78
+ccxtpro==1.0.1
+pandas==2.2.2

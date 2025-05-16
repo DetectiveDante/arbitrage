@@ -1,0 +1,7 @@
+exchanges = [
+    "kucoin",
+    "poloniex",
+    "bitget"
+]
+
+

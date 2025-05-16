@@ -1,0 +1,68 @@
+services:
+  redis:
+    container_name: redis
+    image: redis/redis-stack:latest
+    ports:
+      - "0.0.0.0:6379:6379"
+      - "0.0.0.0:8001:8001"
+    volumes:
+      - ./redis_storage:/redis_storage
+    networks:
+      - network
+    healthcheck:
+      test: ["CMD", "redis-cli", "PING"]
+      interval: 5s
+      retries: 5
+    command: ["redis-server", "redis_storage/redis.conf"]
+
+  auto_fetcher:
+    container_name: auto_fetcher
+    build:
+      dockerfile: Dockerfile
+      context: exchange
+    depends_on:
+      redis:
+        condition: service_healthy
+    networks:
+      - network
+    working_dir: /app
+    environment:
+      REDIS_OM_URL: redis://redis
+    command: ["python", "asyncThread.py"]
+    
+  exchange:
+    container_name: exchange
+    build:
+      dockerfile: Dockerfile
+      context: exchange
+    depends_on:
+      redis:
+        condition: service_healthy
+    networks:
+      - network
+    working_dir: /app
+    environment:
+      REDIS_OM_URL: redis://redis
+    command: ["python", "main.py"]
+
+
+networks:
+  network:  
+   driver: bridge
+
+volumes:
+  data:
+    name: data
+    driver: local
+    driver_opts:
+      o: bind
+      type: none
+      device: redis_storage
+
+  common:
+    name: common
+    driver: local
+    driver_opts:
+      o: bind
+      type: none
+      device: ./common
