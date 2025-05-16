@@ -18,19 +18,21 @@ class LogFormatter(logging.Formatter):
 def get_logger(name: str) -> logging.Logger:
     """Factory that returns a configured logger."""
     logger = logging.getLogger(name)
+
     if not logger.handlers:
         handler = logging.StreamHandler()
-        fmt = "[%(asctime)s] %(levelname)s %(name)s: %(message)s (req=%(request_id)s)"
+        fmt = "[%(asctime)s] %(levelname)s - %(name)s | %(task)s | %(message)s"
         handler.setFormatter(LogFormatter(fmt=fmt,
                                           datefmt="%H:%M:%S",
-                                          extra_arg_name="request_id",
+                                          extra_arg_name="task",
                                           extra_arg_value="unknown"))
         logger.addHandler(handler)
         logger.setLevel(logging.DEBUG)
+
     return logger
     
 
-
+"""
 class Log:
     def __init__(self, name):
         self.log =          logging.getLogger(name)
@@ -69,5 +71,5 @@ def log(name, title, level, msg):
             log.info(msg, extra)
         case 'error':
             log.error(msg, extra)
-
+"""
 

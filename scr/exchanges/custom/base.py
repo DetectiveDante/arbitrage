@@ -1,12 +1,12 @@
 import ccxt.pro as ccxt
-from logger import Log
+from logger import get_logger
 import asyncio
 from redisClient.asyncClient import get_api_info
 from typing import List, Optional, Dict, Any
 
 class ExchangeBase:
     def __init__(self, id):
-        self.log            = Log(id)
+        self.log            = get_logger(id)
         self.infos          = {}
         self.id:str         = id
         self.tradeSymbols   = {'currencies':[], 'markets':[]}

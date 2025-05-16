@@ -15,20 +15,20 @@ services:
       retries: 5
     command: ["redis-server", "redis_storage/redis.conf"]
 
-  auto_fetcher:
-    container_name: auto_fetcher
-    build:
-      dockerfile: Dockerfile
-      context: exchange
-    depends_on:
-      redis:
-        condition: service_healthy
-    networks:
-      - network
-    working_dir: /app
-    environment:
-      REDIS_OM_URL: redis://redis
-    command: ["python", "asyncThread.py"]
+  # auto_fetcher:
+  #   container_name: auto_fetcher
+  #   build:
+  #     dockerfile: Dockerfile
+  #     context: exchange
+  #   depends_on:
+  #     redis:
+  #       condition: service_healthy
+  #   networks:
+  #     - network
+  #   working_dir: /app
+  #   environment:
+  #     REDIS_OM_URL: redis://redis
+  #   command: ["python", "asyncThread.py"]
     
   exchange:
     container_name: exchange
@@ -41,8 +41,6 @@ services:
     networks:
       - network
     working_dir: /app
-    environment:
-      REDIS_OM_URL: redis://redis
     command: ["python", "main.py"]
 
 

@@ -1,7 +1,7 @@
 from aredis_om import JsonModel, EmbeddedJsonModel, get_redis_connection, Field, NotFoundError
 from typing import Dict, Any, List, Optional, Union, Literal, TypedDict, ClassVar
 from pydantic import field_validator
-from logger import log
+from logger import get_logger
 from .. import connectionPool
 
 def flatten_dict(d: dict, parent_key: str = "", sep: str = ".") -> dict:
@@ -28,10 +28,6 @@ class BaseModel(JsonModel):
     """Base class adding update check"""
     class Meta:
         database    = get_redis_connection(connectionPool)
-
-    @classmethod
-    def log(cls, title, level, msg):
-        log(cls.__class__.__name__, title, level, msg)
 
     @classmethod
     def as_dict(cls, **field_values):

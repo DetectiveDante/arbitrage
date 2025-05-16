@@ -1,25 +1,18 @@
 import asyncio
 from custom.poloniex import Poloniex
-from logger import Log
+from logger import get_logger
 from typing import Dict
 
 exchanges = [Poloniex]
 
 class ExchangeManager:
     exchanges:Dict[str, Poloniex] = {}
-    
-    def __init__(self):
-        self.log = Log('Exchange Manager')
-        self.log.n('start...', 'SETUP')
-        self.log.n('done!', 'SETUP')
+    log = get_logger('Exchange Manager')
 
     async def ainit(self):
-        coros = []
-        for i in exchanges:
-            coros.append(i.setup())
-
-        for i in await asyncio.gather(*coros):
-            self.exchanges[i.id]=i
+        self.log.info('start...', extra={'task':'SETUP'})
+        self.exchanges = {v.id:v for v in await asyncio.gather(*[i.setup() for i in exchanges])}
+        self.log.info('done!', extra={'task':'SETUP'})
     
     async def get_base_data(self):
         await asyncio.gather(*[exchange.get_model_data() for exchange in self.exchanges.values()])
