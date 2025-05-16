@@ -8,5 +8,4 @@ em = ExchangeManager()
 async def setup():
     asyncio.gather(omm.setup(), em.setup())
 
-
 asyncio.run(setup())
